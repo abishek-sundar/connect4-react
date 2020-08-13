@@ -10,7 +10,7 @@ function App() {
   var changeState = _ => {
     setState("board");
   }
-  setTimeout(changeState, 5000);
+  setTimeout(changeState, 500);
   if (state == "input"){
     return (
       <body>

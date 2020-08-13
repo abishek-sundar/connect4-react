@@ -18,14 +18,35 @@ class Board extends React.Component{
         };
        this.nextColor = 1;
     }
+    hoverColor = (col) => {
+        var row = this.getLowestRow(col);
+        if (row<6){
+            var tempToken = this.state.tokenColor;
+            tempToken[row][col] = this.nextColor;
+            this.setState({tokenColor: tempToken});
+        }
+        console.log(row,col);
+    }
+    resethoverColor = (col) => {
+        var row = this.getLowestRow(col);
+        if (row<6){
+            var tempToken = this.state.tokenColor;
+            tempToken[row][col] = 0;
+            this.setState({tokenColor: tempToken});
+        }
+    }
 
     getColor = (row,col) => {
         switch(this.state.tokenColor[row][col]){
             case 0:
                 return "circle";
             case 1:
-                return "circle circle-red";
+                return "circle hover-red";
             case 2:
+                return "circle hover-blue";
+            case 3:
+                return "circle circle-red";
+            case 4: 
                 return "circle circle-blue";
         }
     }
@@ -34,7 +55,7 @@ class Board extends React.Component{
         for (var row = 0; row < 6; row++){
             var rowTokens = [];
             for (var col = 0; col < 7; col++){
-                rowTokens.push(<th><Circle key={row*col} tokenColor={this.getColor(row,col)} function={this.changeColor} col={col} /></th>);
+                rowTokens.push(<th><Circle key={row*col} tokenColor={this.getColor(row,col)} function={this.changeColor} col={col} hov={this.hoverColor} out={this.resethoverColor}/></th>);
             }
         colTokens.push(<tr>{rowTokens}</tr>);
         }
@@ -44,7 +65,7 @@ class Board extends React.Component{
 
     getLowestRow = col => {
         for (var row = 5; row >= 0; row--){ 
-            if (this.state.tokenColor[row][col] == 0){
+            if (this.state.tokenColor[row][col] <= 2){
                 return row;
             }
         }
@@ -62,7 +83,7 @@ class Board extends React.Component{
         console.log(row, col);
         if (row < 6){
             var tempToken = this.state.tokenColor;
-            tempToken[row][col] = this.nextColor;
+            tempToken[row][col] = this.nextColor+2;
             this.swapTurns();
             this.setState({tokenColor: tempToken});
         }

@@ -17,7 +17,7 @@ class circle extends React.Component{
     };
     render(props){
         return(     
-            <button className={this.props.tokenColor} onClick={() => this.props.function(this.props.col)}>
+            <button className={this.props.tokenColor} onMouseOver={() => this.props.hov(this.props.col)} onMouseOut={() => this.props.out(this.props.col)} onClick={() => this.props.function(this.props.col)}>
             
             </button>
         )

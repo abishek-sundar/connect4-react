@@ -49,11 +49,17 @@ body {
 .circle-blue{
   background-color: blue;
 }
-.circle:hover{
+/* .circle:hover{
+  background-color: pink;
+} */
+
+.hover-red{
   background-color: pink;
 }
 
-
+.hover-blue{
+  background-color: lightblue;
+}
 .board{
   color: blue;
 }
