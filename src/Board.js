@@ -43,11 +43,11 @@ class Board extends React.Component{
             case 1:
                 return "circle hover-red";
             case 2:
-                return "circle hover-blue";
+                return "circle hover-yellow";
             case 3:
                 return "circle circle-red";
             case 4: 
-                return "circle circle-blue";
+                return "circle circle-yellow";
         }
     }
     renderRow = _ => {
@@ -91,7 +91,7 @@ class Board extends React.Component{
     render(){ 
        var tableData=this.renderRow();
         return (
-            <table>
+            <table className="board">
                 <tbody>
                     {tableData}
                 </tbody>

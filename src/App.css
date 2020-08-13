@@ -15,7 +15,11 @@
 
 body {
   background-color: antiquewhite;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  vertical-align: middle;
+  height: 100%;
+  margin-top: 5%;
   
 }
 .App-header {
@@ -36,18 +40,18 @@ body {
 .circle {
   height: 100px;
   width: 100px;
-  background-color: white;
   border: 2px solid black;
   border-radius: 50%;
   display: inline-block;
   outline: none;
+  margin: 5px;
 }
 .circle-red{
   background-color: red;
 }
 
-.circle-blue{
-  background-color: blue;
+.circle-yellow{
+  background-color: yellow;
 }
 /* .circle:hover{
   background-color: pink;
@@ -57,11 +61,13 @@ body {
   background-color: pink;
 }
 
-.hover-blue{
-  background-color: lightblue;
+.hover-yellow{
+  background-color: lightyellow;
 }
 .board{
-  color: blue;
+  background-color: blue;
+  padding: 25px;
+  border-radius: 10%;
 }
 @keyframes App-logo-spin {
   from {

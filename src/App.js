@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import Board from './Board.js'
 import Input from './Input.js'
-// var state = "input";
-
 
 function App() {
   const [state,setState] = useState("input");
