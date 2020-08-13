@@ -13,6 +13,11 @@
   }
 }
 
+body {
+  background-color: antiquewhite;
+  text-align: center;
+  
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -40,9 +45,14 @@
 .circle-red{
   background-color: red;
 }
+
+.circle-blue{
+  background-color: blue;
+}
 .circle:hover{
   background-color: pink;
 }
+
 
 .board{
   color: blue;
