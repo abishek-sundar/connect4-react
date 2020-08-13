@@ -1,19 +1,23 @@
 import React from 'react';
 import './App.css';
-
+import Board from './Board.js'
 
 class circle extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            count:0
+            class: "circle"
         };
     }
 
-    increment = _ => console.log("You pressed red!");
-    render(){
+    // increment = _ => console.log("You pressed red!");
+    buttonclicked = _ => {
+        this.setState({class: this.state.class += " red"});
+        console.log(this.state.class);
+    };
+    render(props){
         return(     
-            <button className='circle' onClick={this.increment}>
+            <button className={this.props.tokenColor} onClick={this.props.function(this.props.col)}>
             
             </button>
         )
