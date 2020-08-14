@@ -28,6 +28,7 @@ class Board extends React.Component{
         ]
         this.gameRunning = true;
         this.buttonPressed = false;
+        this.winner = "None";
     }
     hoverColor = (col) => {
         var row = this.getLowestRow(col);
@@ -120,9 +121,15 @@ class Board extends React.Component{
         var rowAcross = this.findInARow(row,col,token,this.directions[1]) + this.findInARow(row,col,token,this.directions[2]) - 1;
         var mainDiag = this.findInARow(row,col,token,this.directions[4]) + this.findInARow(row,col,token,this.directions[6]) - 1;
         var countDiag =  this.findInARow(row,col,token,this.directions[3]) + this.findInARow(row,col,token,this.directions[5]) - 1;
-        if (Math.max(colDown,rowAcross,mainDiag,countDiag) === 4){
+        if (Math.max(colDown,rowAcross,mainDiag,countDiag) >= 4){
+            this.winner = this.getWinningColor(token);
             return true;
         }else return false;
+    }
+    
+    getWinningColor = val => {
+        if (val == 3) return "Red";
+        else return "Yellow";
     }
     changeColor = col => {
         var row = this.getLowestRow(col);
@@ -131,17 +138,21 @@ class Board extends React.Component{
             var tempToken = this.state.tokenColor;
             tempToken[row][col] = this.nextColor+2;
             this.setState({tokenColor: tempToken});
-            this.gameRunning = !this.checkGameOver(row,col,this.nextColor+2);
-
-            if (!this.gameRunning){
-                console.log("Game over!!!!!!");
+            this.gameRunning = !this.checkGameOver(row,col,this.nextColor+2)
+            if (this.gameRunning) this.swapTurns();
+            else {
+                this.props.sendData(this.winner);
+                this.props.endFunc("end");
+                // setTimeout(() => this.props.endFunc("end"),300);
+                
             }
-            else this.swapTurns();
-            
         }
     }
-    render(){ 
-       var tableData=this.renderRow();
+    render(props){ 
+        var tableData=this.renderRow();
+        // if (!this.gameRunning){
+        //     return;
+        // }
         return (
             <table className="board">
                 <tbody>
