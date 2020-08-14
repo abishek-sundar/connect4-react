@@ -29,6 +29,7 @@ class Board extends React.Component{
         this.gameRunning = true;
         this.buttonPressed = false;
         this.winner = "None";
+        this.countMoves = 0;
     }
     hoverColor = (col) => {
         var row = this.getLowestRow(col);
@@ -128,7 +129,7 @@ class Board extends React.Component{
     }
     
     getWinningColor = val => {
-        if (val == 3) return "Red";
+        if (val === 3) return "Red";
         else return "Yellow";
     }
     changeColor = col => {
@@ -139,13 +140,14 @@ class Board extends React.Component{
             tempToken[row][col] = this.nextColor+2;
             this.setState({tokenColor: tempToken});
             this.gameRunning = !this.checkGameOver(row,col,this.nextColor+2)
+            if (++this.countMoves === 42) this.gameRunning = false;
             if (this.gameRunning) this.swapTurns();
             else {
                 this.props.sendData(this.winner);
                 this.props.endFunc("end");
-                // setTimeout(() => this.props.endFunc("end"),300);
-                
             }
+            console.log(this.countMoves);
+            
         }
     }
     render(props){ 
