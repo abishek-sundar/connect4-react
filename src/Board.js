@@ -16,7 +16,17 @@ class Board extends React.Component{
                 [0,0,0,0,0,0,0]
             ]
         };
-       this.nextColor = 1;
+        this.nextColor = 1;
+        this.directions = [
+            [1,0], //S
+            [0,1], //E
+            [0,-1], //W
+            [-1,1], //NE
+            [-1,-1], //NW
+            [1,-1], //SW
+            [1,1] //SE
+        ]
+        this.gameRunning = true;
     }
     hoverColor = (col) => {
         var row = this.getLowestRow(col);
@@ -25,7 +35,6 @@ class Board extends React.Component{
             tempToken[row][col] = this.nextColor;
             this.setState({tokenColor: tempToken});
         }
-        console.log(row,col);
     }
     resethoverColor = (col) => {
         var row = this.getLowestRow(col);
@@ -78,14 +87,50 @@ class Board extends React.Component{
             this.nextColor=1;
         }
     }
+
+    isValid = (row,col) => {
+        if (row >=0 && col >=0 && row < 6 && col < 7){
+            return true;
+        }else return false;
+    }
+
+    findInARow = (row,col,token,dir) => {
+        let count = 0;
+        while (this.isValid(row,col)){
+            if (this.state.tokenColor[row][col] == token){
+                count++;
+            }else break;
+            row += dir[0];
+            col += dir[1];
+        }
+        return count;
+    }
+
+    checkGameOver = (row,col,token) => {
+        // S=[1,0];E=[0,1];W=[0,-1];NE=[-1,1];NW=[-1,-1];SW=[1,-1];SE=[1,1]
+        // NE + SW; NW + SE; E+W;
+        
+        var colDown = this.findInARow(row,col,token,this.directions[0]);
+        var rowAcross = this.findInARow(row,col,token,this.directions[1]) + this.findInARow(row,col,token,this.directions[2]) - 1;
+        var mainDiag = this.findInARow(row,col,token,this.directions[4]) + this.findInARow(row,col,token,this.directions[6]) - 1;
+        var countDiag =  this.findInARow(row,col,token,this.directions[3]) + this.findInARow(row,col,token,this.directions[5]) - 1;
+        if (Math.max(colDown,rowAcross,mainDiag,countDiag) == 4){
+            return true;
+        }else return false;
+    }
     changeColor = col => {
         var row = this.getLowestRow(col);
-        console.log(row, col);
         if (row < 6){
             var tempToken = this.state.tokenColor;
             tempToken[row][col] = this.nextColor+2;
-            this.swapTurns();
             this.setState({tokenColor: tempToken});
+            this.gameRunning = !this.checkGameOver(row,col,this.nextColor+2);
+
+            if (!this.gameRunning){
+                console.log("Game over!!!!!!");
+            }
+            else this.swapTurns();
+            
         }
     }
     render(){ 

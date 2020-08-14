@@ -53,16 +53,15 @@ body {
 .circle-yellow{
   background-color: yellow;
 }
-/* .circle:hover{
-  background-color: pink;
-} */
+
 
 .hover-red{
   background-color: pink;
 }
 
 .hover-yellow{
-  background-color: lightyellow;
+  background-color: yellow;
+  opacity: 70%;
 }
 .board{
   background-color: blue;
