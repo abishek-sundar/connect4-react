@@ -9,7 +9,7 @@ function App() {
     setState("board");
   }
   setTimeout(changeState, 500);
-  if (state == "input"){
+  if (state === "input"){
     return (
       <body>
         <Input />

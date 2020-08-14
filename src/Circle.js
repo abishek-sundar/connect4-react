@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Board from './Board.js'
 
 class circle extends React.Component{
     constructor(props){
@@ -10,11 +9,6 @@ class circle extends React.Component{
         };
     }
 
-    // increment = _ => console.log("You pressed red!");
-    buttonclicked = _ => {
-        this.setState({class: this.state.class += " red"});
-        console.log(this.state.class);
-    };
     render(props){
         return(     
             <button className={this.props.tokenColor} onMouseOver={() => this.props.hov(this.props.col)} onMouseOut={() => this.props.out(this.props.col)} onClick={() => this.props.function(this.props.col)}>

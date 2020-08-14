@@ -2,9 +2,6 @@ import React from 'react';
 import './App.css';
 import './Input.css';
 class Input extends React.Component{
-    constructor(props){
-        super(props);
-    }
 
     render(){
         return(     

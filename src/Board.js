@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import Circle from './Circle.js'
 
@@ -27,9 +27,11 @@ class Board extends React.Component{
             [1,1] //SE
         ]
         this.gameRunning = true;
+        this.buttonPressed = false;
     }
     hoverColor = (col) => {
         var row = this.getLowestRow(col);
+        this.buttonPressed = false;
         if (row<6){
             var tempToken = this.state.tokenColor;
             tempToken[row][col] = this.nextColor;
@@ -37,11 +39,13 @@ class Board extends React.Component{
         }
     }
     resethoverColor = (col) => {
-        var row = this.getLowestRow(col);
-        if (row<6){
-            var tempToken = this.state.tokenColor;
-            tempToken[row][col] = 0;
-            this.setState({tokenColor: tempToken});
+        if (!this.buttonPressed){
+            var row = this.getLowestRow(col);
+            if (row<6){
+                var tempToken = this.state.tokenColor;
+                tempToken[row][col] = 0;
+                this.setState({tokenColor: tempToken});
+            }
         }
     }
 
@@ -57,6 +61,8 @@ class Board extends React.Component{
                 return "circle circle-red";
             case 4: 
                 return "circle circle-yellow";
+            default:
+                return "circle";
         }
     }
     renderRow = _ => {
@@ -64,9 +70,9 @@ class Board extends React.Component{
         for (var row = 0; row < 6; row++){
             var rowTokens = [];
             for (var col = 0; col < 7; col++){
-                rowTokens.push(<th><Circle key={row*col} tokenColor={this.getColor(row,col)} function={this.changeColor} col={col} hov={this.hoverColor} out={this.resethoverColor}/></th>);
+                rowTokens.push(<th key={row.toString()+col.toString()}><Circle tokenColor={this.getColor(row,col)} function={this.changeColor} col={col} hov={this.hoverColor} out={this.resethoverColor}/></th>);
             }
-        colTokens.push(<tr>{rowTokens}</tr>);
+            colTokens.push(<tr key={row.toString()}>{rowTokens}</tr>);
         }
         
         return colTokens;
@@ -81,7 +87,7 @@ class Board extends React.Component{
         return 6;
     }
     swapTurns = _ => {
-        if (this.nextColor==1){
+        if (this.nextColor===1){
             this.nextColor=2;
         }else{
             this.nextColor=1;
@@ -97,7 +103,7 @@ class Board extends React.Component{
     findInARow = (row,col,token,dir) => {
         let count = 0;
         while (this.isValid(row,col)){
-            if (this.state.tokenColor[row][col] == token){
+            if (this.state.tokenColor[row][col] === token){
                 count++;
             }else break;
             row += dir[0];
@@ -114,12 +120,13 @@ class Board extends React.Component{
         var rowAcross = this.findInARow(row,col,token,this.directions[1]) + this.findInARow(row,col,token,this.directions[2]) - 1;
         var mainDiag = this.findInARow(row,col,token,this.directions[4]) + this.findInARow(row,col,token,this.directions[6]) - 1;
         var countDiag =  this.findInARow(row,col,token,this.directions[3]) + this.findInARow(row,col,token,this.directions[5]) - 1;
-        if (Math.max(colDown,rowAcross,mainDiag,countDiag) == 4){
+        if (Math.max(colDown,rowAcross,mainDiag,countDiag) === 4){
             return true;
         }else return false;
     }
     changeColor = col => {
         var row = this.getLowestRow(col);
+        this.buttonPressed=true;
         if (row < 6){
             var tempToken = this.state.tokenColor;
             tempToken[row][col] = this.nextColor+2;
