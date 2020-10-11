@@ -36,7 +36,12 @@ body {
 .App-link {
   color: #61dafb;
 }
-
+.startWrap{
+  text-align: center;
+}
+.startButtons{
+  height: 30px;
+}
 .circle {
   height: 100px;
   width: 100px;
