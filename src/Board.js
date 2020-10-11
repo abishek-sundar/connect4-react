@@ -100,7 +100,6 @@ function Board(props) {
     const findInARow = (row, col, token, dir) => {
         let count = 0;
         while (isValid(row, col)) {
-            // console.log(tokenColor[row][col], token);
             if (tempToken[row][col] === token) {
                 count++;
             } else break;
@@ -111,10 +110,6 @@ function Board(props) {
     }
 
     const checkGameOver = (row, col, token) => {
-        // S=[1,0];E=[0,1];W=[0,-1];NE=[-1,1];NW=[-1,-1];SW=[1,-1];SE=[1,1]
-        // NE + SW; NW + SE; E+W;
-        // console.log(token);
-        // console.log(tokenColor);
         var colDown = findInARow(row, col, token, directions[0]);
         var rowAcross = findInARow(row, col, token, directions[1]) + findInARow(row, col, token, directions[2]) - 1;
         var mainDiag = findInARow(row, col, token, directions[4]) + findInARow(row, col, token, directions[6]) - 1;
@@ -142,7 +137,6 @@ function Board(props) {
                 
                 setGameRunning(false);
             }
-            // React.forceUpdate();
             if (++countMoves === 42) setGameRunning(false);
             swapTurns();
             
