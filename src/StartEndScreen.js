@@ -15,24 +15,21 @@ var renderStart = props => {
     return(    
         <div>
             <h1 className="inputText">Red goes first!</h1>
-            <button onClick={() => props.goNext("board")} >Single player</button>
-            <button onClick={() => props.goNext("board")} >Multiplayer</button>
+            <button onClick={() => props.goNext("board")} >Let's go!</button>
         </div> 
-
     )
 }
 
-// var inputButton = _ => {
-//     console.log("button press");
-// }
-
-
 
 var renderEnd = props => {
-    if (this.props.winner === "None") var message = "Game tied!";
-    else message = this.props.winner + " wins!!";
+    if (props.winner === "None") var message = "Game tied!";
+    else message = props.winner + " wins!!";
     return(     
-        <h1 className="inputText">{message}</h1>
+        <div>
+            <h1 className="inputText">{message}</h1>
+            <button onClick={() => props.goNext("board")} >Let's go next!</button>
+        </div>
+
     )
 }
 export default StartEndScreen;

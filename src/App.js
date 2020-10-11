@@ -7,39 +7,26 @@ import {BoardProvider} from "./BoardContext.js";
 var hasWon = "None";
 function App() {
 	const [state, setState] = useState("input");
-	// var changeState = x => {
-	// 	console.log(state);
-	// 	setState(x);
-	// }
-
 	var getGameData = winner => {
-		// console.log(state);
+		setState("over");
 		hasWon = winner;
 	}
-	// console.log(state);
-	// setTimeout((() => changeState("board")), 10000);
 	if (state === "input") {
 		console.log(state);
 		return (
-			<body>
 				<StartEndScreen screen="start" goNext={setState}/>
-			</body>
 		);
 	} else if (state === "board") {
 		return (
-			<BoardProvider>
-				<body>	
-					<Board endFunc={setState} sendData={getGameData} />
-				</body>
-			</BoardProvider>
-
-		);
-	} else {
-		
-		return (
 			<body>
-				<StartEndScreen screen="end" winner={hasWon} />
+				<BoardProvider>
+					<Board sendData={getGameData} />
+				</BoardProvider>
 			</body>
+		);
+	} else if (state === "over"){
+		return (
+			<StartEndScreen screen="end" winner={hasWon} goNext={setState}/>
 		)
 	}
 
