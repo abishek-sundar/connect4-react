@@ -2,8 +2,10 @@ import React, { useContext, useEffect } from 'react';
 import './App.css';
 import Circle from './Circle.js'
 import { BoardContext } from './BoardContext.js';
-
 import update from 'immutability-helper'; // ES6
+
+const axios = require('axios');
+
 
 var nextColor = 1;
 const directions = [
@@ -17,6 +19,7 @@ const directions = [
 ];
 var countMoves = 0;
 var tempToken = [];
+var lastMoves = [0, 0];
 function Board(props) {
 
     const [tokenColor, setTokenColor, gameRunning, setGameRunning, winner, setWinner] = useContext(BoardContext);
@@ -40,7 +43,7 @@ function Board(props) {
         buttonPressed = false;
         if (row < 6) {
             tempToken = update(tokenColor, {
-                [row]: {[col]: {$set: nextColor}}
+                [row]: { [col]: { $set: nextColor } }
             });
             setTokenColor(tempToken);
         }
@@ -50,7 +53,7 @@ function Board(props) {
             var row = getLowestRow(col);
             if (row < 6) {
                 tempToken = update(tokenColor, {
-                    [row]: {[col]: {$set: 0}}
+                    [row]: { [col]: { $set: 0 } }
                 });
                 setTokenColor(tempToken);
             }
@@ -127,29 +130,49 @@ function Board(props) {
 
     const changeColor = (col) => {
         var row = getLowestRow(col);
+        lastMoves = [row, col];
         buttonPressed = true;
         if (row < 6) {
             tempToken = update(tokenColor, {
-                [row]: {[col]: {$set: nextColor + 2}}
+                [row]: { [col]: { $set: nextColor + 2 } }
             });
             setTokenColor(tempToken);
-            if (checkGameOver(row, col, nextColor + 2)){
-                
+            if (checkGameOver(row, col, nextColor + 2)) {
+
                 setGameRunning(false);
             }
             if (++countMoves === 42) setGameRunning(false);
+
+            sendToNode();
             swapTurns();
-            
+
         }
     }
-    useEffect(() => { 
-        if (!gameRunning){
+
+    const sendToNode = _ => {
+        let data = {
+            row: lastMoves[0],
+            col: lastMoves[1],
+            gameRunning: gameRunning,
+            winner: winner
+        };
+        console.log(data);
+        axios.post("http://localhost:8080/", data).then(() => {
+           //do something
+         }).catch(function (error) {
+            console.log(error);
+          });
+    }
+    useEffect(() => {
+        if (!gameRunning) {
             nextColor = 1;
-            countMoves=0;
-            tempToken=[];
+            countMoves = 0;
+            tempToken = [];
             props.sendData(winner);
+            sendToNode();
         }
-     }, [gameRunning]);
+        
+    }, [gameRunning]);
 
 
     var tableData = renderRow();
