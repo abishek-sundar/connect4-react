@@ -30,7 +30,10 @@ function Board(props) {
         for (var row = 0; row < 6; row++) {
             var rowTokens = [];
             for (var col = 0; col < 7; col++) {
-                rowTokens.push(<th key={row.toString() + col.toString()}><Circle color={getColor(row, col)} function={changeColor} col={col} hov={hoverColor} out={resethoverColor} /></th>);
+                rowTokens.push(
+                    <th key={row.toString() + col.toString()}>
+                        <Circle color={getColor(row, col)} function={changeColor} col={col} hov={hoverColor} out={resethoverColor} />
+                    </th>);
             }
             colTokens.push(<tr key={row.toString()}>{rowTokens}</tr>);
         }
@@ -95,9 +98,7 @@ function Board(props) {
     }
 
     const isValid = (row, col) => {
-        if (row >= 0 && col >= 0 && row < 6 && col < 7) {
-            return true;
-        } else return false;
+        return (row >= 0 && col >= 0 && row < 6 && col < 7);
     }
 
     const findInARow = (row, col, token, dir) => {
@@ -130,22 +131,16 @@ function Board(props) {
 
     const changeColor = (col) => {
         var row = getLowestRow(col);
-        lastMoves = [row, col];
         buttonPressed = true;
         if (row < 6) {
+            lastMoves = [row, col];
             tempToken = update(tokenColor, {
                 [row]: { [col]: { $set: nextColor + 2 } }
             });
             setTokenColor(tempToken);
-            if (checkGameOver(row, col, nextColor + 2)) {
-
-                setGameRunning(false);
-            }
-            if (++countMoves === 42) setGameRunning(false);
-
+            if (checkGameOver(row, col, nextColor + 2) || ++countMoves === 42) setGameRunning(false);
             sendToNode();
             swapTurns();
-
         }
     }
 
@@ -159,24 +154,23 @@ function Board(props) {
         console.log(data);
         axios.post("http://localhost:8080/", data).then(() => {
            //do something
-         }).catch(function (error) {
+        }).catch(function (error) {
             console.log(error);
-          });
+        });
     }
     useEffect(() => {
         if (!gameRunning) {
             nextColor = 1;
             countMoves = 0;
             tempToken = [];
-            props.sendData(winner);
             sendToNode();
+            props.goNext("end");
         }
         
     }, [gameRunning]);
 
 
     var tableData = renderRow();
-    console.log();
     return (
         <table className="board">
             <tbody>

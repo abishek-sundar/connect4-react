@@ -4,32 +4,21 @@ import Board from './Board.js';
 import StartEndScreen from './StartEndScreen.js';
 import {BoardProvider} from "./BoardContext.js";
 
-var hasWon = "None";
 function App() {
-	const [state, setState] = useState("input");
-	var getGameData = winner => {
-		setState("over");
-		hasWon = winner;
-	}
-	if (state === "input") {
-		console.log(state);
+	const [state, setState] = useState("start");
+	if (state === "start" || state === "end"){
 		return (
-				<StartEndScreen screen="start" goNext={setState}/>
-		);
+			<BoardProvider>
+				<StartEndScreen state={state} goNext={setState}/>
+			</BoardProvider>
+		)
 	} else if (state === "board") {
 		return (
-			<body>
-				<BoardProvider>
-					<Board sendData={getGameData} />
-				</BoardProvider>
-			</body>
+			<BoardProvider>
+				<Board goNext={setState}/>
+			</BoardProvider>
 		);
-	} else if (state === "over"){
-		return (
-			<StartEndScreen screen="end" winner={hasWon} goNext={setState}/>
-		)
-	}
-
+	} else return "<h1>Unknown state</h1>"
 }
 
 export default App;

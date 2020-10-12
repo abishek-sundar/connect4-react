@@ -13,7 +13,7 @@ export const BoardProvider = props => {
         ]
     );
     const [gameRunning, setGameRunning] = useState(true);
-    const [winner, setWinner] =useState("None");
+    const [winner, setWinner] = useState("None");
     
     
     return (

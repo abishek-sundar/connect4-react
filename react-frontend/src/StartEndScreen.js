@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './App.css';
+import { BoardContext } from './BoardContext.js';
 
 function StartEndScreen(props) {
-
-    if (props.screen === "start") {
+    const [tokenColor, setTokenColor, gameRunning, setGameRunning, winner, setWinner] = useContext(BoardContext);
+    if (props.state === "start") {
         return renderStart(props);
-    } else {
-        return renderEnd(props);
+    } else if (props.state === "end") {
+        return renderEnd(props, winner);
     }
 }
 
@@ -20,9 +21,9 @@ var renderStart = props => {
 }
 
 
-var renderEnd = props => {
-    if (props.winner === "None") var message = "Game tied!";
-    else message = props.winner + " wins!!";
+var renderEnd = (props,winner) => {
+    if (winner === "None") var message = "Game tied!";
+    else message = winner + " wins!!";
     return (
         <div className="startWrap">
             <h1 className="inputText">{message}</h1>
