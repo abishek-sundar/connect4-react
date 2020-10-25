@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import './index.css';
 import './App.css';
 import Circle from './Circle.js'
 import { BoardContext } from './BoardContext.js';
@@ -22,7 +23,7 @@ var tempToken = [];
 var lastMoves = [0, 0];
 function Board(props) {
 
-    const [tokenColor, setTokenColor, gameRunning, setGameRunning, winner, setWinner] = useContext(BoardContext);
+    const [tokenColor, setTokenColor, gameRunning, setGameRunning, winner, setWinner, online, resetTokenColor] = useContext(BoardContext);
     var buttonPressed = false;
 
     const renderRow = _ => {
@@ -51,6 +52,7 @@ function Board(props) {
             setTokenColor(tempToken);
         }
     }
+    
     const resethoverColor = (col) => {
         if (!buttonPressed) {
             var row = getLowestRow(col);
@@ -89,6 +91,7 @@ function Board(props) {
         }
         return 6;
     }
+    
     const swapTurns = _ => {
         if (nextColor === 1) {
             nextColor = 2;
@@ -114,10 +117,10 @@ function Board(props) {
     }
 
     const checkGameOver = (row, col, token) => {
-        var colDown = findInARow(row, col, token, directions[0]);
-        var rowAcross = findInARow(row, col, token, directions[1]) + findInARow(row, col, token, directions[2]) - 1;
-        var mainDiag = findInARow(row, col, token, directions[4]) + findInARow(row, col, token, directions[6]) - 1;
-        var countDiag = findInARow(row, col, token, directions[3]) + findInARow(row, col, token, directions[5]) - 1;
+        let colDown = findInARow(row, col, token, directions[0]);
+        let rowAcross = findInARow(row, col, token, directions[1]) + findInARow(row, col, token, directions[2]) - 1;
+        let mainDiag = findInARow(row, col, token, directions[4]) + findInARow(row, col, token, directions[6]) - 1;
+        let countDiag = findInARow(row, col, token, directions[3]) + findInARow(row, col, token, directions[5]) - 1;
         if (Math.max(colDown, rowAcross, mainDiag, countDiag) >= 4) {
             setWinner(getWinningColor(token));
             return true;
@@ -158,8 +161,10 @@ function Board(props) {
             console.log(error);
         });
     }
+
     useEffect(() => {
         if (!gameRunning) {
+            resetTokenColor();
             nextColor = 1;
             countMoves = 0;
             tempToken = [];
@@ -172,11 +177,13 @@ function Board(props) {
 
     var tableData = renderRow();
     return (
-        <table className="board">
-            <tbody>
-                {tableData}
-            </tbody>
-        </table>
+            <table className="board">
+                <tbody className="boardbody">
+                    {tableData}
+                </tbody>
+            </table>
+
+
     )
 }
 

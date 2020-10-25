@@ -18,7 +18,12 @@ function App() {
 				<Board goNext={setState}/>
 			</BoardProvider>
 		);
-	} else return "<h1>Unknown state</h1>"
+	} else {
+		console.log(state);
+		return (
+			<h1>{state}</h1>
+		);
+	}
 }
 
 export default App;
