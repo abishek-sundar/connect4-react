@@ -6,21 +6,26 @@ import { BoardProvider } from "./BoardContext.js";
 
 function App() {
   const [state, setState] = useState("start");
-  if (state === "start" || state === "end") {
-    return (
-      <BoardProvider>
-        <StartEndScreen state={state} goNext={setState} />
-      </BoardProvider>
-    );
-  } else if (state === "board") {
-    return (
-      <BoardProvider>
-        <Board goNext={setState} />
-      </BoardProvider>
-    );
-  } else {
-    console.log(state);
-    return <h1>{state}</h1>;
+  switch (state) {
+    case "start":
+    case "end":
+      return (
+        <BoardProvider>
+          <StartEndScreen state={state} goNext={setState} />
+        </BoardProvider>
+      );
+      break;
+    case "board":
+      return (
+        <BoardProvider>
+          <Board goNext={setState} />
+        </BoardProvider>
+      );
+      break;
+    default:
+      console.log(state);
+      return <h1>{state}</h1>;
+      break;
   }
 }
 
