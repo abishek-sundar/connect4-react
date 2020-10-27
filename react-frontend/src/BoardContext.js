@@ -14,7 +14,7 @@ export const BoardProvider = (props) => {
   const [gameRunning, setGameRunning] = useState(true);
   const [winner, setWinner] = useState("None");
   var online = false;
-  const nodeURL = "http://localhost:8080/";
+  const nodeURL = "http://localhost:8080";
   const resetTokenColor = (_) => {
     setTokenColor(boardDefault);
   };

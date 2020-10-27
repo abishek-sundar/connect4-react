@@ -16,6 +16,8 @@ const port = 8080;
 const saltRounds = 10;
 var credentials = { key: privateKey, cert: certificate };
 const app = express();
+const HTTP_SUCCESS = 200;
+const HTTP_UNAUTH = 401;
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(cors());
@@ -28,21 +30,15 @@ MongoClient.connect(url, function (err, client) {
   db = client.db(dbName);
 });
 
-const insertPassword = function (db, document) {
+async function checkCreds(db, document) {
   const collection = db.collection("documents");
-  collection.find({ user: document["user"] }).toArray(function (err, docs) {
-    if (docs.length == 1) {
-      let hash = docs[0]["password"];
-      bcrypt.compare(document["password"], hash, function (err, res) {
-        if (res === true) {
-          console.log("Should sign in!");
-        } else console.log("Bad password!");
-      });
-    } else {
-      console.log("Make a user.");
-    }
-  });
-};
+  const docs = await collection.find({ user: document["user"] }).toArray();
+  if (docs.length == 1) {
+    let hash = docs[0]["password"];
+    const match = await bcrypt.compare(document["password"], hash);
+    return match ? HTTP_SUCCESS : HTTP_UNAUTH;
+  } else return HTTP_UNAUTH;
+}
 
 const findDocuments = function (db) {
   // Get the documents collection
@@ -67,10 +63,9 @@ app.get("/pls", function (req, res) {
   findDocuments(db);
   res.sendStatus(200);
 });
-app.post("/signin", function (req, res) {
+app.post("/signin", async function (req, res) {
   let data = req.body;
-  insertPassword(db, data);
-  res.sendStatus(200);
+  res.sendStatus(await checkCreds(db, data));
 });
 
 var httpServer = http.createServer(app);

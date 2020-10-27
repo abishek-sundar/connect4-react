@@ -175,7 +175,7 @@ function Board(props) {
     };
     console.log(data);
     axios
-      .post(nodeURL, data)
+      .post(`${nodeURL}/`, data)
       .then(() => {
         //do something
       })

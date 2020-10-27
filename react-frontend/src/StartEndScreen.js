@@ -2,21 +2,20 @@ import React, { useContext, useState } from "react";
 import "./App.css";
 import { BoardContext } from "./BoardContext.js";
 const axios = require("axios");
-const saltRounds = 10;
 function StartEndScreen(props) {
   var loginClicked = (event) => {
-    // bcrypt.hash(password, saltRounds, function(err, hash) {
-    //     let data = {
-    //         user: user,
-    //         password: hash
-    //     };
-    //     console.log(data);
-    //     axios.post("http://localhost:8080/signin", data).then(() => {
-    //        //do something
-    //     }).catch(function (error) {
-    //         console.log(error);
-    //     });
-    // });
+    let data = {
+      user: user,
+      password: password,
+    };
+    axios
+      .post(`${nodeURL}/signin`, data)
+      .then(() => {
+        //do something
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     console.log(password);
   };
 
@@ -70,17 +69,7 @@ function StartEndScreen(props) {
     );
   };
 
-  const [
-    tokenColor,
-    setTokenColor,
-    gameRunning,
-    setGameRunning,
-    winner,
-    setWinner,
-    online,
-    resetTokenColor,
-    nodeURL,
-  ] = useContext(BoardContext);
+  const [setGameRunning, winner, setWinner, nodeURL] = useContext(BoardContext);
   const [user, setUser] = useState("username");
   const [password, setPassword] = useState("password");
   if (props.state === "start") {
