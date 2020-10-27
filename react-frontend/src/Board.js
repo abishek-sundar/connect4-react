@@ -30,10 +30,11 @@ function Board(props) {
     setWinner,
     online,
     resetTokenColor,
+    nodeURL,
   ] = useContext(BoardContext);
   var buttonPressed = false;
 
-  const renderRow = (_) => {
+  const renderTable = (_) => {
     var colTokens = [];
     for (var row = 0; row < 6; row++) {
       var rowTokens = [];
@@ -106,11 +107,7 @@ function Board(props) {
   };
 
   const swapTurns = (_) => {
-    if (nextColor === 1) {
-      nextColor = 2;
-    } else {
-      nextColor = 1;
-    }
+    nextColor = nextColor === 1 ? 2 : 1;
   };
 
   const isValid = (row, col) => {
@@ -139,19 +136,18 @@ function Board(props) {
       findInARow(row, col, token, directions[4]) +
       findInARow(row, col, token, directions[6]) -
       1;
-    let countDiag =
+    let altDiag =
       findInARow(row, col, token, directions[3]) +
       findInARow(row, col, token, directions[5]) -
       1;
-    if (Math.max(colDown, rowAcross, mainDiag, countDiag) >= 4) {
+    if (Math.max(colDown, rowAcross, mainDiag, altDiag) >= 4) {
       setWinner(getWinningColor(token));
       return true;
     } else return false;
   };
 
   const getWinningColor = (val) => {
-    if (val === 3) return "Red";
-    else return "Yellow";
+    return val === 3 ? "Red" : "Yellow";
   };
 
   const changeColor = (col) => {
@@ -179,7 +175,7 @@ function Board(props) {
     };
     console.log(data);
     axios
-      .post("http://localhost:8080/", data)
+      .post(nodeURL, data)
       .then(() => {
         //do something
       })
@@ -199,7 +195,7 @@ function Board(props) {
     }
   }, [gameRunning]);
 
-  var tableData = renderRow();
+  var tableData = renderTable();
   return (
     <table className="board">
       <tbody className="boardbody">{tableData}</tbody>

@@ -8,7 +8,7 @@ function Circle(props) {
       onMouseOver={() => props.hov(props.col)}
       onMouseOut={() => props.out(props.col)}
       onClick={() => props.function(props.col)}
-    ></button>
+    />
   );
 }
 

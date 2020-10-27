@@ -14,18 +14,15 @@ function App() {
           <StartEndScreen state={state} goNext={setState} />
         </BoardProvider>
       );
-      break;
     case "board":
       return (
         <BoardProvider>
           <Board goNext={setState} />
         </BoardProvider>
       );
-      break;
     default:
       console.log(state);
       return <h1>{state}</h1>;
-      break;
   }
 }
 

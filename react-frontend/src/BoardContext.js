@@ -2,26 +2,21 @@ import React, { useState, createContext } from "react";
 
 export const BoardContext = createContext();
 export const BoardProvider = (props) => {
-  const [tokenColor, setTokenColor] = useState([
+  let boardDefault = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0],
-  ]);
+  ];
+  const [tokenColor, setTokenColor] = useState(boardDefault);
   const [gameRunning, setGameRunning] = useState(true);
   const [winner, setWinner] = useState("None");
   var online = false;
+  const nodeURL = "http://localhost:8080/";
   const resetTokenColor = (_) => {
-    setTokenColor([
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-    ]);
+    setTokenColor(boardDefault);
   };
   return (
     <BoardContext.Provider
@@ -34,6 +29,7 @@ export const BoardProvider = (props) => {
         setWinner,
         online,
         resetTokenColor,
+        nodeURL,
       ]}
     >
       {props.children}

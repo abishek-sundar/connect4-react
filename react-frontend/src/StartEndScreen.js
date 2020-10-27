@@ -79,6 +79,7 @@ function StartEndScreen(props) {
     setWinner,
     online,
     resetTokenColor,
+    nodeURL,
   ] = useContext(BoardContext);
   const [user, setUser] = useState("username");
   const [password, setPassword] = useState("password");
