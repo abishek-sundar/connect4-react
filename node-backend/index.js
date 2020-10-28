@@ -16,8 +16,6 @@ const port = 8080;
 const saltRounds = 10;
 var credentials = { key: privateKey, cert: certificate };
 const app = express();
-const HTTP_SUCCESS = 200;
-const HTTP_UNAUTH = 401;
 app.use(express.urlencoded());
 app.use(express.json());
 app.use(cors());
@@ -30,42 +28,34 @@ MongoClient.connect(url, function (err, client) {
   db = client.db(dbName);
 });
 
-async function checkCreds(db, document) {
-  const collection = db.collection("documents");
-  const docs = await collection.find({ user: document["user"] }).toArray();
-  if (docs.length == 1) {
-    let hash = docs[0]["password"];
-    const match = await bcrypt.compare(document["password"], hash);
-    return match ? HTTP_SUCCESS : HTTP_UNAUTH;
-  } else return HTTP_UNAUTH;
-}
-
-const findDocuments = function (db) {
-  // Get the documents collection
-  const collection = db.collection("documents");
-  // Find some documents
-  collection.find({}).toArray(function (err, docs) {
-    console.log("Found the following records");
-    console.log(docs);
-  });
-};
-
-app.get("/", function (req, res) {
-  res.send("<h1>Hello World</h1>");
-});
-
-app.post("/", function (req, res) {
-  console.log(req.body);
-  console.log(req.headers);
-  res.sendStatus(200);
-});
-app.get("/pls", function (req, res) {
-  findDocuments(db);
-  res.sendStatus(200);
-});
 app.post("/signin", async function (req, res) {
   let data = req.body;
-  res.sendStatus(await checkCreds(db, data));
+  const collection = db.collection("users");
+  const users = await collection.find({ user: data["user"] }).toArray();
+  if (users.length == 1) {
+    let hash = users[0]["password"];
+    const match = await bcrypt.compare(data["password"], hash);
+    res.sendStatus(match ? 200 : 401);
+  } else return res.sendStatus(401);
+});
+
+app.post("/signup", async function (req, res) {
+  let data = req.body;
+  const collection = db.collection("users");
+  const users = await collection.find({ user: data["user"] }).toArray();
+  if (users.length == 0) {
+    const hash = await bcrypt.hash(data["password"], saltRounds);
+    data["password"] = hash;
+    await collection.insertOne(data);
+    res.sendStatus(200);
+  } else res.sendStatus(401);
+});
+
+app.post("/deleteacc", async function (req, res) {
+  let data = req.body;
+  const collection = db.collection("users");
+  const users = await collection.deleteOne({ user: data["user"] });
+  res.sendStatus(users["deletedCount"] == 1 ? 200 : 400);
 });
 
 var httpServer = http.createServer(app);
