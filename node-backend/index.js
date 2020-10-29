@@ -36,7 +36,7 @@ app.post("/signin", async function (req, res) {
     let hash = users[0]["password"];
     const match = await bcrypt.compare(data["password"], hash);
     res.sendStatus(match ? 200 : 401);
-  } else return res.sendStatus(401);
+  } else res.sendStatus(401);
 });
 
 app.post("/signup", async function (req, res) {
