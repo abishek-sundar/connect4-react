@@ -69,10 +69,13 @@ function StartEndScreen(props) {
     );
   };
 
-  const [setGameRunning, winner, setWinner, nodeURL] = useContext(BoardContext);
+  const { setGameRunning, winner, setWinner, nodeURL } = useContext(
+    BoardContext
+  );
   const [user, setUser] = useState("username");
   const [password, setPassword] = useState("password");
   if (props.state === "start") {
+    console.log({ nodeURL });
     return renderStart(props);
   } else if (props.state === "end") {
     return renderEnd(props);

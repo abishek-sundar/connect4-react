@@ -20,7 +20,7 @@ export const BoardProvider = (props) => {
   };
   return (
     <BoardContext.Provider
-      value={[
+      value={{
         tokenColor,
         setTokenColor,
         gameRunning,
@@ -30,7 +30,7 @@ export const BoardProvider = (props) => {
         online,
         resetTokenColor,
         nodeURL,
-      ]}
+      }}
     >
       {props.children}
     </BoardContext.Provider>

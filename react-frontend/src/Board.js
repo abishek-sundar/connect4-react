@@ -21,7 +21,7 @@ var countMoves = 0;
 var tempToken = [];
 var lastMoves = [0, 0];
 function Board(props) {
-  const [
+  const {
     tokenColor,
     setTokenColor,
     gameRunning,
@@ -31,7 +31,7 @@ function Board(props) {
     online,
     resetTokenColor,
     nodeURL,
-  ] = useContext(BoardContext);
+  } = useContext(BoardContext);
   var buttonPressed = false;
 
   const renderTable = (_) => {
@@ -161,7 +161,7 @@ function Board(props) {
       setTokenColor(tempToken);
       if (checkGameOver(row, col, nextColor + 2) || ++countMoves === 42)
         setGameRunning(false);
-      sendToNode();
+      if (online) sendToNode();
       swapTurns();
     }
   };
@@ -190,7 +190,8 @@ function Board(props) {
       nextColor = 1;
       countMoves = 0;
       tempToken = [];
-      sendToNode();
+      console.log({ props, winner });
+      if (online) sendToNode();
       props.goNext("end");
     }
   }, [gameRunning]);
